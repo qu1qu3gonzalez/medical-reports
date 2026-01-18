@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Directorship Billing Reports</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f7fafc;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #4a5568;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab:hover {
+            background: #edf2f7;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        select, input[type="text"], input[type="number"], input[type="email"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .task-list {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .task-item label {
+            margin: 0;
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .task-item input[type="number"] {
+            width: 100px;
+            margin-left: 15px;
+        }
+
+        .hours-summary {
+            background: #edf2f7;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .hours-summary h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .hours-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #cbd5e0;
+        }
+
+        .hours-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 18px;
+            color: #667eea;
+            padding-top: 15px;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .button.secondary {
+            background: #48bb78;
+        }
+
+        .button.danger {
+            background: #f56565;
+        }
+
+        .signature-section {
+            background: #fffaf0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 2px dashed #ed8936;
+        }
+
+        .signature-display {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 32px;
+            color: #2d3748;
+            padding: 20px;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .report-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .report-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .report-header h3 {
+            color: #2d3748;
+        }
+
+        .report-meta {
+            font-size: 13px;
+            color: #718096;
+        }
+
+        .report-details {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .alert.success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 2px solid #48bb78;
+        }
+
+        .alert.warning {
+            background: #fef5e7;
+            color: #744210;
+            border: 2px solid #ed8936;
+        }
+
+        .alert.error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 2px solid #f56565;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .settings-card {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .settings-card h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .facility-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .tabs, .button, .header p {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Medical Directorship Billing Reports</h1>
+            <p>Professional monthly reporting system for medical directors</p>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('create')">Create Report</div>
+            <div class="tab" onclick="switchTab('history')">Report History</div>
+            <div class="tab" onclick="switchTab('settings')">Settings</div>
+        </div>
+
+        <!-- CREATE REPORT TAB -->
+        <div id="create-tab" class="tab-content active">
+            <div id="alertContainer"></div>
+
+            <div class="form-group">
+                <label>Provider Name</label>
+                <select id="providerSelect" onchange="updateFacilityList()">
+                    <option value="">Select Provider</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Facility</label>
+                <select id="facilitySelect" onchange="updateTasksAndHours()">
+                    <option value="">Select Facility</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Report Month</label>
+                <input type="month" id="reportMonth" onchange="updateTasksAndHours()">
+            </div>
+
+            <div id="tasksSection" style="display:none;">
+                <h3 style="margin-bottom: 15px; color: #2d3748;">Tasks Completed</h3>
+                <div class="task-list" id="taskList"></div>
+
+                <div class="hours-summary">
+                    <h3>Hours Summary</h3>
+                    <div class="hours-row">
+                        <span>Total Hours Logged:</span>
+                        <span id="totalHours">0</span>
+                    </div>
+                    <div class="hours-row">
+                        <span>Required Hours:</span>
+                        <span id="requiredHours">0</span>
+                    </div>
+                    <div class="hours-row">
+                        <span>Status:</span>
+                        <span id="hoursStatus">-</span>
+                    </div>
+                </div>
+
+                <div class="signature-section">
+                    <h3 style="margin-bottom: 15px; color: #c05621;">Electronic Signature</h3>
+                    <div class="form-group">
+                        <label>Type your full name to sign</label>
+                        <input type="text" id="signatureName" placeholder="Enter your full name">
+                    </div>
+                    <div class="signature-display" id="signatureDisplay">
+                        [Signature will appear here]
+                    </div>
+                    <div style="text-align: center; color: #718096; font-size: 13px;">
+                        By signing, you certify that the information provided is accurate and complete.
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <button class="button" onclick="generateReport()">📄 Generate Report</button>
+                    <button class="button secondary" onclick="saveReport()">💾 Save Report</button>
+                    <button class="button" onclick="emailReport()">📧 Email Report</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORY TAB -->
+        <div id="history-tab" class="tab-content">
+            <h2 style="margin-bottom: 20px; color: #2d3748;">Report History</h2>
+            <div id="historyList"></div>
+        </div>
+
+        <!-- SETTINGS TAB -->
+        <div id="settings-tab" class="tab-content">
+            <h2 style="margin-bottom: 20px; color: #2d3748;">System Settings</h2>
+            
+            <div class="settings-grid">
+                <div class="settings-card">
+                    <h3>👨‍⚕️ Providers</h3>
+                    <div class="form-group">
+                        <label>Add New Provider</label>
+                        <input type="text" id="newProviderName" placeholder="Provider name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="newProviderEmail" placeholder="provider@example.com">
+                    </div>
+                    <button class="button" onclick="addProvider()">Add Provider</button>
+                    <div id="providersList" style="margin-top: 20px;"></div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>🏥 Facilities</h3>
+                    <div class="form-group">
+                        <label>Facility Name</label>
+                        <input type="text" id="newFacilityName" placeholder="Facility name">
+                    </div>
+                    <div class="form-group">
+                        <label>Required Hours/Month</label>
+                        <input type="number" id="newFacilityHours" placeholder="20" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Email</label>
+                        <input type="email" id="newFacilityEmail" placeholder="facility@example.com">
+                    </div>
+                    <button class="button" onclick="addFacility()">Add Facility</button>
+                    <div id="facilitiesList" style="margin-top: 20px;"></div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>✅ Tasks</h3>
+                    <div class="form-group">
+                        <label>Add New Task</label>
+                        <input type="text" id="newTaskName" placeholder="Task name">
+                    </div>
+                    <button class="button" onclick="addTask()">Add Task</button>
+                    <div id="tasksList" style="margin-top: 20px;"></div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>📧 Office Manager Email</h3>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="officeManagerEmail" placeholder="manager@example.com">
+                    </div>
+                    <button class="button" onclick="saveOfficeManagerEmail()">Save Email</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button class="button danger" onclick="resetAllData()">🗑️ Reset All Data</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Default data structure
+        let appData = {
+            providers: [
+                { id: 1, name: 'Jose Gonzalez MD', email: 'drjeg@postacutenc.com' },
+                { id: 2, name: 'Eileen Caquias Gonzalez MD', email: 'drecg@postacutenc.com' }
+            ],
+            facilities: [
+                { id: 1, name: 'Brookstone Living Center', hours: 10, email: 'admin@brookstone.com' },
+                { id: 2, name: 'Brunswick Cove', hours: 16, email: 'admin@brunswickcove.com' },
+                { id: 3, name: 'North Chase Nursing & Rehab', hours: 14, email: 'admin@northchase.com' },
+                { id: 4, name: 'Bladen East', hours: 14, email: 'admin@bladeneast.com' },
+                { id: 5, name: 'Harborview', hours: 16, email: 'admin@harborview.com' },
+                { id: 6, name: 'Bolivia Rehabilitation & Health', hours: 12, email: 'admin@bolivia.com' },
+                { id: 7, name: 'Warsaw Rehabilitation & Health', hours: 10, email: 'admin@warsaw.com' },
+                { id: 8, name: 'Elizabethtown Healthcare & Rehab', hours: 12, email: 'admin@elizabethtown.com' }
+            ],
+            tasks: [
+                '1️⃣ Medical Director Administrative Oversight - Admin/DON leadership meeting',
+                '1️⃣ Medical Director Administrative Oversight - Medical care coordination review',
+                '1️⃣ Medical Director Administrative Oversight - Clinical policy review/update',
+                '1️⃣ Medical Director Administrative Oversight - Standing orders/order set review',
+                '1️⃣ Medical Director Administrative Oversight - Provider coverage/escalation pathway review',
+                '1️⃣ Medical Director Administrative Oversight - Facility clinical priorities planning',
+                '1️⃣ Medical Director Administrative Oversight - Documentation standards review',
+                '2️⃣ QAPI/Quality Assurance - QAPI meeting participation',
+                '2️⃣ QAPI/Quality Assurance - Quality dashboard review',
+                '2️⃣ QAPI/Quality Assurance - Falls with injury review',
+                '2️⃣ QAPI/Quality Assurance - Pressure injury review',
+                '2️⃣ QAPI/Quality Assurance - Weight loss/nutrition review',
+                '2️⃣ QAPI/Quality Assurance - Avoidable transfer/readmission review',
+                '2️⃣ QAPI/Quality Assurance - Root cause analysis (RCA)',
+                '2️⃣ QAPI/Quality Assurance - Performance improvement plan (PIP) development',
+                '2️⃣ QAPI/Quality Assurance - Follow-up on prior PIP',
+                '3️⃣ Infection Prevention - Infection control meeting/touchpoint',
+                '3️⃣ Infection Prevention - Antibiotic utilization review',
+                '3️⃣ Infection Prevention - UTI stewardship review',
+                '3️⃣ Infection Prevention - Respiratory illness surveillance',
+                '3️⃣ Infection Prevention - Outbreak preparedness review',
+                '3️⃣ Infection Prevention - Isolation/cohorting policy review',
+                '3️⃣ Infection Prevention - Vaccination program oversight',
+                '3️⃣ Infection Prevention - C. difficile case review',
+                '4️⃣ Medication Safety - Monthly pharmacist/DRR conference',
+                '4️⃣ Medication Safety - High-risk medication review',
+                '4️⃣ Medication Safety - Anticoagulation safety review',
+                '4️⃣ Medication Safety - Insulin/hypoglycemia review',
+                '4️⃣ Medication Safety - Opioid stewardship review',
+                '4️⃣ Medication Safety - Renal dosing review',
+                '4️⃣ Medication Safety - Polypharmacy reduction review',
+                '4️⃣ Medication Safety - Adverse drug event (ADE) review',
+                '5️⃣ Psychotropic & Behavioral Health - Psychotropic medication census review',
+                '5️⃣ Psychotropic & Behavioral Health - Gradual dose reduction (GDR) oversight',
+                '5️⃣ Psychotropic & Behavioral Health - Behavioral symptom management review',
+                '5️⃣ Psychotropic & Behavioral Health - Dementia care systems review',
+                '5️⃣ Psychotropic & Behavioral Health - Non-pharmacologic intervention review',
+                '5️⃣ Psychotropic & Behavioral Health - Restraint reduction review',
+                '5️⃣ Psychotropic & Behavioral Health - Elopement risk review',
+                '6️⃣ Transitions of Care - Admission process review',
+                '6️⃣ Transitions of Care - Initial orders/med reconciliation audit',
+                '6️⃣ Transitions of Care - Skilled documentation review',
+                '6️⃣ Transitions of Care - Hospital transfer review',
+                '6️⃣ Transitions of Care - ED transfer review',
+                '6️⃣ Transitions of Care - Post-hospital high-risk case review',
+                '6️⃣ Transitions of Care - Hospice/palliative appropriateness review',
+                '7️⃣ Staff & Provider Education - Nursing in-service',
+                '7️⃣ Staff & Provider Education - Provider education/coaching',
+                '7️⃣ Staff & Provider Education - Clinical guideline update education',
+                '7️⃣ Staff & Provider Education - Survey readiness education',
+                '7️⃣ Staff & Provider Education - Case-based teaching',
+                '7️⃣ Staff & Provider Education - Documentation improvement education',
+                '8️⃣ Regulatory Compliance - Survey readiness review',
+                '8️⃣ Regulatory Compliance - F-tag risk review',
+                '8️⃣ Regulatory Compliance - Complaint investigation review',
+                '8️⃣ Regulatory Compliance - Policy compliance audit',
+                '8️⃣ Regulatory Compliance - Mock survey participation',
+                '8️⃣ Regulatory Compliance - Corrective action plan review',
+                '9️⃣ Facility-Specific Medical Leadership - Facility-requested clinical consult',
+                '9️⃣ Facility-Specific Medical Leadership - Special project',
+                '9️⃣ Facility-Specific Medical Leadership - Corporate/chain medical meeting',
+                '9️⃣ Facility-Specific Medical Leadership - Emergency clinical leadership support',
+                '9️⃣ Facility-Specific Medical Leadership - Other (specify in notes)'
+            ],
+            reports: [],
+            officeManagerEmail: 'admin@postacutenc.com'
+        };
+
+        // Load data from localStorage
+        function loadData() {
+            const saved = localStorage.getItem('medicalDirectorshipData');
+            if (saved) {
+                appData = JSON.parse(saved);
+            }
+            updateAllLists();
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('medicalDirectorshipData', JSON.stringify(appData));
+        }
+
+        // Initialize
+        function init() {
+            loadData();
+            const today = new Date();
+            document.getElementById('reportMonth').value = 
+                `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${tab}-tab`).classList.add('active');
+            
+            if (tab === 'history') {
+                displayHistory();
+            } else if (tab === 'settings') {
+                updateSettingsLists();
+            }
+        }
+
+        // Update all dropdowns
+        function updateAllLists() {
+            const providerSelect = document.getElementById('providerSelect');
+            providerSelect.innerHTML = '<option value="">Select Provider</option>';
+            appData.providers.forEach(p => {
+                providerSelect.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+            });
+        }
+
+        function updateFacilityList() {
+            const facilitySelect = document.getElementById('facilitySelect');
+            facilitySelect.innerHTML = '<option value="">Select Facility</option>';
+            appData.facilities.forEach(f => {
+                facilitySelect.innerHTML += `<option value="${f.id}">${f.name}</option>`;
+            });
+        }
+
+        function updateTasksAndHours() {
+            const provider = document.getElementById('providerSelect').value;
+            const facility = document.getElementById('facilitySelect').value;
+            const month = document.getElementById('reportMonth').value;
+
+            if (provider && facility && month) {
+                document.getElementById('tasksSection').style.display = 'block';
+                renderTasks();
+                updateHoursSummary();
+            } else {
+                document.getElementById('tasksSection').style.display = 'none';
+            }
+        }
+
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+            
+            appData.tasks.forEach((task, index) => {
+                taskList.innerHTML += `
+                    <div class="task-item">
+                        <label>${task}</label>
+                        <input type="number" 
+                               id="task-${index}" 
+                               min="0" 
+                               step="0.5" 
+                               placeholder="Hours"
+                               onchange="updateHoursSummary()"
+                               value="0">
+                    </div>
+                `;
+            });
+        }
+
+        function updateHoursSummary() {
+            let total = 0;
+            appData.tasks.forEach((task, index) => {
+                const hours = parseFloat(document.getElementById(`task-${index}`).value) || 0;
+                total += hours;
+            });
+
+            const facilityId = parseInt(document.getElementById('facilitySelect').value);
+            const facility = appData.facilities.find(f => f.id === facilityId);
+            const required = facility ? facility.hours : 0;
+
+            document.getElementById('totalHours').textContent = total.toFixed(1);
+            document.getElementById('requiredHours').textContent = required;
+
+            const statusEl = document.getElementById('hoursStatus');
+            if (total >= required) {
+                statusEl.textContent = '✅ Complete';
+                statusEl.style.color = '#48bb78';
+            } else {
+                statusEl.textContent = `⚠️ ${(required - total).toFixed(1)} hours short`;
+                statusEl.style.color = '#ed8936';
+            }
+        }
+
+        // Signature handling
+        document.getElementById('signatureName').addEventListener('input', function() {
+            const name = this.value;
+            document.getElementById('signatureDisplay').textContent = 
+                name || '[Signature will appear here]';
+        });
+
+        // Show alert
+        function showAlert(message, type = 'success') {
+            const container = document.getElementById('alertContainer');
+            container.innerHTML = `<div class="alert ${type}">${message}</div>`;
+            setTimeout(() => container.innerHTML = '', 5000);
+        }
+
+        // Generate Report
+        function generateReport() {
+            const providerId = parseInt(document.getElementById('providerSelect').value);
+            const facilityId = parseInt(document.getElementById('facilitySelect').value);
+            const month = document.getElementById('reportMonth').value;
+            const signature = document.getElementById('signatureName').value;
+
+            if (!providerId || !facilityId || !month) {
+                showAlert('Please fill in all required fields', 'error');
+                return;
+            }
+
+            if (!signature) {
+                showAlert('Please provide your signature', 'error');
+                return;
+            }
+
+            const provider = appData.providers.find(p => p.id === providerId);
+            const facility = appData.facilities.find(f => f.id === facilityId);
+
+            let tasks = [];
+            let totalHours = 0;
+            appData.tasks.forEach((task, index) => {
+                const hours = parseFloat(document.getElementById(`task-${index}`).value) || 0;
+                if (hours > 0) {
+                    tasks.push({ name: task, hours });
+                    totalHours += hours;
+                }
+            });
+
+            if (tasks.length === 0) {
+                showAlert('Please enter hours for at least one task', 'error');
+                return;
+            }
+
+            const report = {
+                provider: provider.name,
+                facility: facility.name,
+                month,
+                tasks,
+                totalHours,
+                requiredHours: facility.hours,
+                signature,
+                signedDate: new Date().toISOString()
+            };
+
+            // Create printable report
+            const reportWindow = window.open('', '_blank');
+            reportWindow.document.write(generateReportHTML(report));
+            reportWindow.document.close();
+            reportWindow.print();
+
+            showAlert('Report generated successfully!', 'success');
+        }
+
+        function generateReportHTML(report) {
+            const date = new Date(report.month);
+            const monthName = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            
+            let tasksHTML = '';
+            report.tasks.forEach(task => {
+                tasksHTML += `
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">${task.name}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: right;">${task.hours}</td>
+                    </tr>
+                `;
+            });
+
+            return `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Medical Directorship Report - ${monthName}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; }
+                        .header { text-align: center; margin-bottom: 40px; border-bottom: 3px solid #2d3748; padding-bottom: 20px; }
+                        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+                        .info-item { background: #f7fafc; padding: 15px; border-radius: 6px; }
+                        .info-label { font-weight: bold; color: #4a5568; font-size: 12px; margin-bottom: 5px; }
+                        .info-value { color: #2d3748; font-size: 16px; }
+                        table { width: 100%; border-collapse: collapse; margin: 30px 0; }
+                        th { background: #2d3748; color: white; padding: 12px; text-align: left; }
+                        .summary { background: #edf2f7; padding: 20px; border-radius: 6px; margin: 30px 0; }
+                        .signature-box { margin-top: 50px; padding: 20px; border: 2px solid #2d3748; border-radius: 6px; }
+                        .signature { font-family: 'Brush Script MT', cursive; font-size: 28px; margin: 20px 0; }
+                        .footer { margin-top: 40px; font-size: 12px; color: #718096; text-align: center; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>Medical Directorship Billing Report</h1>
+                        <p>${monthName}</p>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">PROVIDER</div>
+                            <div class="info-value">${report.provider}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">FACILITY</div>
+                            <div class="info-value">${report.facility}</div>
+                        </div>
+                    </div>
+
+                    <h2>Tasks Completed</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Task Description</th>
+                                <th style="text-align: right;">Hours</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tasksHTML}
+                        </tbody>
+                    </table>
+
+                    <div class="summary">
+                        <h3>Hours Summary</h3>
+                        <p><strong>Total Hours Logged:</strong> ${report.totalHours.toFixed(1)}</p>
+                        <p><strong>Required Hours:</strong> ${report.requiredHours}</p>
+                        <p><strong>Status:</strong> ${report.totalHours >= report.requiredHours ? '✅ Complete' : '⚠️ Incomplete'}</p>
+                    </div>
+
+                    <div class="signature-box">
+                        <p><strong>Electronic Signature</strong></p>
+                        <div class="signature">${report.signature}</div>
+                        <p style="font-size: 12px; color: #718096;">
+                            Signed on: ${new Date(report.signedDate).toLocaleString()}<br>
+                            I certify that the information provided above is accurate and complete.
+                        </p>
+                    </div>
+
+                    <div class="footer">
+                        <p>This is an electronically generated report. No physical signature required.</p>
+                    </div>
+                </body>
+                </html>
+            `;
+        }
+
+        // Save Report
+        function saveReport() {
+            const providerId = parseInt(document.getElementById('providerSelect').value);
+            const facilityId = parseInt(document.getElementById('facilitySelect').value);
+            const month = document.getElementById('reportMonth').value;
+            const signature = document.getElementById('signatureName').value;
+
+            if (!providerId || !facilityId || !month || !signature) {
+                showAlert('Please complete the report and sign before saving', 'error');
+                return;
+            }
+
+            const provider = appData.providers.find(p => p.id === providerId);
+            const facility = appData.facilities.find(f => f.id === facilityId);
+
+            let tasks = [];
+            let totalHours = 0;
+            appData.tasks.forEach((task, index) => {
+                const hours = parseFloat(document.getElementById(`task-${index}`).value) || 0;
+                if (hours > 0) {
+                    tasks.push({ name: task, hours });
+                    totalHours += hours;
+                }
+            });
+
+            if (tasks.length === 0) {
+                showAlert('Please enter hours for at least one task', 'error');
+                return;
+            }
+
+            const report = {
+                id: Date.now(),
+                providerId,
+                providerName: provider.name,
+                providerEmail: provider.email,
+                facilityId,
+                facilityName: facility.name,
+                facilityEmail: facility.email,
+                month,
+                tasks,
+                totalHours,
+                requiredHours: facility.hours,
+                signature,
+                signedDate: new Date().toISOString()
+            };
+
+            appData.reports.push(report);
+            saveData();
+            showAlert('Report saved successfully!', 'success');
+            
+            // Clear form
+            setTimeout(() => {
+                if (confirm('Report saved! Would you like to create another report?')) {
+                    location.reload();
+                }
+            }, 1000);
+        }
+
+        // Email Report
+        function emailReport() {
+            const providerId = parseInt(document.getElementById('providerSelect').value);
+            const facilityId = parseInt(document.getElementById('facilitySelect').value);
+            const month = document.getElementById('reportMonth').value;
+            const signature = document.getElementById('signatureName').value;
+
+            if (!providerId || !facilityId || !month || !signature) {
+                showAlert('Please complete the report and sign before emailing', 'error');
+                return;
+            }
+
+            const provider = appData.providers.find(p => p.id === providerId);
+            const facility = appData.facilities.find(f => f.id === facilityId);
+
+            let tasks = [];
+            let totalHours = 0;
+            appData.tasks.forEach((task, index) => {
+                const hours = parseFloat(document.getElementById(`task-${index}`).value) || 0;
+                if (hours > 0) {
+                    tasks.push({ name: task, hours });
+                    totalHours += hours;
+                }
+            });
+
+            const date = new Date(month);
+            const monthName = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+            let tasksList = '';
+            tasks.forEach(task => {
+                tasksList += `${task.name}: ${task.hours} hours\n`;
+            });
+
+            const emailBody = `
+Medical Directorship Billing Report
+${monthName}
+
+Provider: ${provider.name}
+Facility: ${facility.name}
+
+Tasks Completed:
+${tasksList}
+Total Hours: ${totalHours.toFixed(1)}
+Required Hours: ${facility.hours}
+Status: ${totalHours >= facility.hours ? 'Complete' : 'Incomplete'}
+
+Electronically signed by ${signature}
+Signed on: ${new Date().toLocaleString()}
+
+This is an automatically generated report.
+            `.trim();
+
+            const recipients = [
+                provider.email,
+                facility.email,
+                appData.officeManagerEmail
+            ].filter(email => email).join(',');
+
+            const mailtoLink = `mailto:${recipients}?subject=Medical Directorship Report - ${monthName}&body=${encodeURIComponent(emailBody)}`;
+            
+            window.location.href = mailtoLink;
+            showAlert('Email client opened! Please review and send the email.', 'success');
+        }
+
+        // Display History
+        function displayHistory() {
+            const historyList = document.getElementById('historyList');
+            
+            if (appData.reports.length === 0) {
+                historyList.innerHTML = `
+                    <div class="empty-state">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <h3>No Reports Yet</h3>
+                        <p>Create your first report to see it here.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const sortedReports = [...appData.reports].sort((a, b) => 
+                new Date(b.signedDate) - new Date(a.signedDate)
+            );
+
+            historyList.innerHTML = sortedReports.map(report => {
+                const date = new Date(report.month);
+                const monthName = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                const signedDate = new Date(report.signedDate).toLocaleDateString();
+
+                return `
+                    <div class="report-card">
+                        <div class="report-header">
+                            <div>
+                                <h3>${report.providerName} - ${report.facilityName}</h3>
+                                <div class="report-meta">
+                                    ${monthName} • ${report.totalHours.toFixed(1)}/${report.requiredHours} hours • 
+                                    Signed: ${signedDate}
+                                </div>
+                            </div>
+                            <div>
+                                <button class="button" onclick="viewReport(${report.id})">View</button>
+                                <button class="button danger" onclick="deleteReport(${report.id})">Delete</button>
+                            </div>
+                        </div>
+                        <div class="report-details">
+                            <strong>Tasks:</strong><br>
+                            ${report.tasks.map(t => `${t.name} (${t.hours}h)`).join(', ')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function viewReport(reportId) {
+            const report = appData.reports.find(r => r.id === reportId);
+            if (report) {
+                const reportWindow = window.open('', '_blank');
+                reportWindow.document.write(generateReportHTML(report));
+                reportWindow.document.close();
+            }
+        }
+
+        function deleteReport(reportId) {
+            if (confirm('Are you sure you want to delete this report? This cannot be undone.')) {
+                appData.reports = appData.reports.filter(r => r.id !== reportId);
+                saveData();
+                displayHistory();
+                showAlert('Report deleted successfully', 'success');
+            }
+        }
+
+        // Settings functions
+        function updateSettingsLists() {
+            // Providers
+            const providersList = document.getElementById('providersList');
+            providersList.innerHTML = '<h4 style="margin: 20px 0 10px 0; color: #2d3748;">Current Providers</h4>';
+            appData.providers.forEach(p => {
+                providersList.innerHTML += `
+                    <div class="facility-item">
+                        <div>
+                            <strong>${p.name}</strong><br>
+                            <small style="color: #718096;">${p.email}</small>
+                        </div>
+                        <button class="button danger" style="padding: 8px 15px; font-size: 12px;" 
+                                onclick="deleteProvider(${p.id})">Delete</button>
+                    </div>
+                `;
+            });
+
+            // Facilities
+            const facilitiesList = document.getElementById('facilitiesList');
+            facilitiesList.innerHTML = '<h4 style="margin: 20px 0 10px 0; color: #2d3748;">Current Facilities</h4>';
+            appData.facilities.forEach(f => {
+                facilitiesList.innerHTML += `
+                    <div class="facility-item">
+                        <div>
+                            <strong>${f.name}</strong><br>
+                            <small style="color: #718096;">${f.hours} hours/month • ${f.email}</small>
+                        </div>
+                        <button class="button danger" style="padding: 8px 15px; font-size: 12px;" 
+                                onclick="deleteFacility(${f.id})">Delete</button>
+                    </div>
+                `;
+            });
+
+            // Tasks
+            const tasksList = document.getElementById('tasksList');
+            tasksList.innerHTML = '<h4 style="margin: 20px 0 10px 0; color: #2d3748;">Current Tasks</h4>';
+            appData.tasks.forEach((task, index) => {
+                tasksList.innerHTML += `
+                    <div class="facility-item">
+                        <span>${task}</span>
+                        <button class="button danger" style="padding: 8px 15px; font-size: 12px;" 
+                                onclick="deleteTask(${index})">Delete</button>
+                    </div>
+                `;
+            });
+
+            // Office Manager Email
+            document.getElementById('officeManagerEmail').value = appData.officeManagerEmail;
+        }
+
+        function addProvider() {
+            const name = document.getElementById('newProviderName').value.trim();
+            const email = document.getElementById('newProviderEmail').value.trim();
+
+            if (!name || !email) {
+                showAlert('Please enter both name and email', 'error');
+                return;
+            }
+
+            const newId = Math.max(...appData.providers.map(p => p.id), 0) + 1;
+            appData.providers.push({ id: newId, name, email });
+            saveData();
+            updateAllLists();
+            updateSettingsLists();
+
+            document.getElementById('newProviderName').value = '';
+            document.getElementById('newProviderEmail').value = '';
+            showAlert('Provider added successfully!', 'success');
+        }
+
+        function deleteProvider(id) {
+            if (confirm('Are you sure you want to delete this provider?')) {
+                appData.providers = appData.providers.filter(p => p.id !== id);
+                saveData();
+                updateAllLists();
+                updateSettingsLists();
+                showAlert('Provider deleted', 'success');
+            }
+        }
+
+        function addFacility() {
+            const name = document.getElementById('newFacilityName').value.trim();
+            const hours = parseInt(document.getElementById('newFacilityHours').value);
+            const email = document.getElementById('newFacilityEmail').value.trim();
+
+            if (!name || !hours || !email) {
+                showAlert('Please fill in all fields', 'error');
+                return;
+            }
+
+            const newId = Math.max(...appData.facilities.map(f => f.id), 0) + 1;
+            appData.facilities.push({ id: newId, name, hours, email });
+            saveData();
+            updateSettingsLists();
+
+            document.getElementById('newFacilityName').value = '';
+            document.getElementById('newFacilityHours').value = '';
+            document.getElementById('newFacilityEmail').value = '';
+            showAlert('Facility added successfully!', 'success');
+        }
+
+        function deleteFacility(id) {
+            if (confirm('Are you sure you want to delete this facility?')) {
+                appData.facilities = appData.facilities.filter(f => f.id !== id);
+                saveData();
+                updateSettingsLists();
+                showAlert('Facility deleted', 'success');
+            }
+        }
+
+        function addTask() {
+            const name = document.getElementById('newTaskName').value.trim();
+
+            if (!name) {
+                showAlert('Please enter a task name', 'error');
+                return;
+            }
+
+            appData.tasks.push(name);
+            saveData();
+            updateSettingsLists();
+
+            document.getElementById('newTaskName').value = '';
+            showAlert('Task added successfully!', 'success');
+        }
+
+        function deleteTask(index) {
+            if (confirm('Are you sure you want to delete this task?')) {
+                appData.tasks.splice(index, 1);
+                saveData();
+                updateSettingsLists();
+                showAlert('Task deleted', 'success');
+            }
+        }
+
+        function saveOfficeManagerEmail() {
+            const email = document.getElementById('officeManagerEmail').value.trim();
+            if (!email) {
+                showAlert('Please enter an email address', 'error');
+                return;
+            }
+            appData.officeManagerEmail = email;
+            saveData();
+            showAlert('Office manager email saved!', 'success');
+        }
+
+        function resetAllData() {
+            if (confirm('⚠️ WARNING: This will delete ALL data including reports, providers, and facilities. This cannot be undone. Are you absolutely sure?')) {
+                if (confirm('Last chance! This will permanently delete everything. Continue?')) {
+                    localStorage.removeItem('medicalDirectorshipData');
+                    location.reload();
+                }
+            }
+        }
+
+        // Initialize on load
+        window.onload = init;
+    </script>
+</body>
+</html>
